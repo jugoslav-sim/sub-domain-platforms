@@ -88,7 +88,7 @@ export const mockVenueEditorData = {
     heroHeadline: 'Elevate Your Night',
     heroDescription: 'Experience the best views, cocktails, and music in the city. Welcome to The Cloud Lounge.',
     heroButtonText: 'Book a Table',
-    heroLayoutStyle: 'cinematic-center',
+    heroLayoutStyle: 'cinematic-center' as const,
     heroBackgroundImageUrl: 'https://images.unsplash.com/photo-1570572225388-755e88447d61?auto=format&fit=crop&w=1600&q=80'
 };
 
