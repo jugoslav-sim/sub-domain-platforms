@@ -1,0 +1,50 @@
+import { CheckCircle, Download, MapPin } from 'lucide-react';
+
+export function HowItWorks() {
+    const steps = [
+        {
+            icon: CheckCircle,
+            title: '1. Always Ready',
+            description: 'Your unique QR code is automatically generated the moment you sign up on the page.',
+        },
+        {
+            icon: Download,
+            title: '2. Download & Print',
+            description: 'Download your custom-branded QR code directly from your dashboard.',
+        },
+        {
+            icon: MapPin,
+            title: '3. Place Anywhere',
+            description: 'Add it to your menus, table tents, flyers, or posters to connect your physical space to your online presence.',
+        },
+    ];
+
+    return (
+        <section className="py-24 bg-white">
+            <div className="container mx-auto px-4">
+                <div className="text-center mb-16">
+                    <span className="inline-block px-4 py-2 bg-gray-100 text-gray-600 text-sm font-medium rounded-full mb-6">
+                        How It Works
+                    </span>
+                    <h2 className="text-4xl font-bold text-gray-900">
+                        Simplicity is Key
+                    </h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                    {steps.map((step, index) => (
+                        <div key={index} className="flex flex-col items-center text-center">
+                            <div className="w-20 h-20 bg-[#E11D48] rounded-full flex items-center justify-center mb-8 shadow-lg shadow-rose-500/20">
+                                <step.icon className="w-10 h-10 text-white" />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-4">{step.title}</h3>
+                            <p className="text-gray-600 leading-relaxed max-w-xs">
+                                {step.description}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+}
