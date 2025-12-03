@@ -36,11 +36,13 @@ export default function NotFound() {
               doesn't exist
             </>
           ) : (
-            'Subdomain Not Found'
+            'Page Not Found'
           )}
         </h1>
         <p className="mt-3 text-lg text-gray-600">
-          This subdomain hasn't been created yet.
+          {subdomain
+            ? "This subdomain hasn't been created yet."
+            : "The page you are looking for does not exist."}
         </p>
         <div className="mt-6">
           <Link

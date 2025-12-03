@@ -31,7 +31,7 @@ const navItems: NavItem[] = [
     { label: 'Events', href: '/admin/events', icon: Calendar, section: 'GROWTH' },
     { label: 'Marketing AI', href: '/admin/marketing-ai', icon: Sparkles, section: 'THE MARKETING AI' },
     { label: 'Venue Site Editor', href: '/admin/venue-editor', icon: Globe, section: 'ADMIN' },
-    { label: 'SaaS Landing Editor', href: '/admin/landing-editor', icon: Palette },
+    { label: 'App Landing Editor', href: '/admin/app-landing-editor', icon: Palette },
 ];
 
 const featureLinks = [
