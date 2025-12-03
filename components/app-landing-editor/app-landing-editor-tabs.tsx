@@ -1,8 +1,10 @@
-'use client';
-
 import * as React from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { AppLandingHeroSection } from './app-landing-hero-section';
+import { AppLandingFeaturesSection } from './app-landing-features-section';
+import { AppLandingBrandingSection } from './app-landing-branding-section';
+import { AppLandingLayoutSection } from './app-landing-layout-section';
+import { AppLandingSEOSection } from './app-landing-seo-section';
 
 export function AppLandingEditorTabs() {
     const [activeTab, setActiveTab] = React.useState("hero");
@@ -24,27 +26,19 @@ export function AppLandingEditorTabs() {
             </TabsContent>
 
             <TabsContent value="features">
-                <div className="p-8 text-center text-muted-foreground bg-gray-50 rounded-lg border border-dashed">
-                    Features customization coming soon
-                </div>
+                <AppLandingFeaturesSection />
             </TabsContent>
 
             <TabsContent value="branding">
-                <div className="p-8 text-center text-muted-foreground bg-gray-50 rounded-lg border border-dashed">
-                    Branding options coming soon
-                </div>
+                <AppLandingBrandingSection />
             </TabsContent>
 
             <TabsContent value="layout">
-                <div className="p-8 text-center text-muted-foreground bg-gray-50 rounded-lg border border-dashed">
-                    Layout options coming soon
-                </div>
+                <AppLandingLayoutSection />
             </TabsContent>
 
             <TabsContent value="seo">
-                <div className="p-8 text-center text-muted-foreground bg-gray-50 rounded-lg border border-dashed">
-                    SEO settings coming soon
-                </div>
+                <AppLandingSEOSection />
             </TabsContent>
         </Tabs>
     );

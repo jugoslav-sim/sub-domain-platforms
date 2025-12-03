@@ -91,3 +91,115 @@ export const mockVenueEditorData = {
     heroLayoutStyle: 'cinematic-center',
     heroBackgroundImageUrl: 'https://images.unsplash.com/photo-1570572225388-755e88447d61?auto=format&fit=crop&w=1600&q=80'
 };
+
+export const mockAppLandingEditorData = {
+    // Hero Tab
+    heroHeadline: 'Your Venue, Your Vibe, Your Success',
+    heroDescription: 'VenueVibe provides the ultimate toolkit for nightclubs, bars, and restaurants to create stunning, interactive landing pages that capture your unique atmosphere.',
+    heroButtonText: 'Get Started Now',
+    heroLayoutStyle: 'cinematic-center' as const,
+    heroBackgroundImageUrl: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1600&q=80',
+
+    // Features Tab
+    features: [
+        {
+            id: '1',
+            icon: 'Zap',
+            title: 'Lightning Fast Setup',
+            description: 'Build your perfect venue landing page in minutes, not hours. Our intuitive editor makes it easy.',
+            order: 1
+        },
+        {
+            id: '2',
+            icon: 'Palette',
+            title: 'Fully Customizable',
+            description: 'Match your brand colors, upload your logo, and customize every aspect of your page.',
+            order: 2
+        },
+        {
+            id: '3',
+            icon: 'Smartphone',
+            title: 'Mobile Optimized',
+            description: 'Your landing page looks stunning on every device - desktop, tablet, and mobile.',
+            order: 3
+        },
+        {
+            id: '4',
+            icon: 'TrendingUp',
+            title: 'Analytics Included',
+            description: 'Track visitors, engagement, and conversion rates with built-in analytics.',
+            order: 4
+        },
+        {
+            id: '5',
+            icon: 'Shield',
+            title: 'Secure & Reliable',
+            description: 'Enterprise-grade security and 99.9% uptime guarantee for your peace of mind.',
+            order: 5
+        },
+        {
+            id: '6',
+            icon: 'Users',
+            title: 'Customer Support',
+            description: '24/7 dedicated support team ready to help you succeed with your venue.',
+            order: 6
+        }
+    ],
+    featuresLayoutStyle: '3-column' as const,
+
+    // Branding Tab
+    branding: {
+        logoUrl: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?auto=format&fit=crop&w=200&q=80',
+        logoWidth: 140,
+        logoPosition: 'left' as const,
+        colors: {
+            primary: '#6366f1',
+            secondary: '#ec4899',
+            accent: '#8b5cf6'
+        },
+        typography: {
+            headingFont: 'Inter',
+            bodyFont: 'Inter',
+            fontSizes: {
+                h1: 48,
+                h2: 36,
+                h3: 24,
+                body: 16
+            }
+        }
+    },
+
+    // Layout Tab
+    layout: {
+        sections: [
+            { id: '1', type: 'hero' as const, name: 'Hero Section', visible: true, order: 1 },
+            { id: '2', type: 'features' as const, name: 'Features', visible: true, order: 2 },
+            { id: '3', type: 'process' as const, name: 'Process Steps', visible: true, order: 3 },
+            { id: '4', type: 'cta' as const, name: 'Call to Action', visible: true, order: 4 },
+            { id: '5', type: 'testimonials' as const, name: 'Testimonials', visible: false, order: 5 },
+            { id: '6', type: 'pricing' as const, name: 'Pricing', visible: false, order: 6 }
+        ],
+        navigation: {
+            style: 'sticky' as const,
+            links: [
+                { id: '1', label: 'Features', href: '#features', order: 1 },
+                { id: '2', label: 'Pricing', href: '#pricing', order: 2 },
+                { id: '3', label: 'About', href: '#about', order: 3 },
+                { id: '4', label: 'Contact', href: '#contact', order: 4 }
+            ],
+            showCTA: true,
+            ctaText: 'Get Started',
+            ctaHref: '/signup'
+        }
+    },
+
+    // SEO Tab
+    seo: {
+        metaTitle: 'VenueVibe - Your Venue, Your Vibe, Your Success',
+        metaDescription: 'Create stunning landing pages for your nightclub, bar, or restaurant. VenueVibe provides the ultimate toolkit for venue marketing.',
+        metaKeywords: ['venue management', 'landing page', 'nightclub', 'bar', 'restaurant'],
+        ogImage: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80',
+        ogTitle: 'VenueVibe - Landing Page Builder for Venues',
+        ogDescription: 'Build beautiful, high-converting landing pages for your venue in minutes.'
+    }
+};
