@@ -1,46 +1,78 @@
 import Link from 'next/link';
 import { FeatureCard } from './feature-card';
-import { QrCode, ScanText, Paintbrush, Calendar, Waves, Camera } from 'lucide-react';
+import { QrCode, ScanText, Paintbrush, Calendar, Waves, Camera, LucideIcon } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
+import { Feature } from '@/lib/app-landing-editor-schema';
 
-export function FeaturesSection() {
-    const features = [
-        {
-            icon: QrCode,
-            title: 'QR Code Generation',
-            description: 'Generate unique QR codes for your venue page.',
-            href: '/qr-code-generation',
-        },
-        {
-            icon: ScanText,
-            title: 'AI Menu Scanner',
-            description: 'Instantly digitize your physical menu.',
-            href: '/ai-menu-scanner',
-        },
-        {
-            icon: Paintbrush,
-            title: 'Personal Branding',
-            description: 'Customize your page with your logo and colors.',
-            href: '/branding',
-        },
-        {
-            icon: Calendar,
-            title: 'Events',
-            description: 'Showcase your events for guests to see.',
-            href: '/events',
-        },
-        {
-            icon: Waves,
-            title: 'Rentals',
-            description: 'Post rentals like VIP booths.',
-            href: '/rentals',
-        },
-        {
-            icon: Camera,
-            title: 'Photo Booth',
-            description: 'Engage customers with a branded photo booth.',
-            href: '/photo-booth',
-        },
-    ];
+// Default features when none are configured
+const defaultFeatures = [
+    {
+        icon: QrCode,
+        title: 'QR Code Generation',
+        description: 'Generate unique QR codes for your venue page.',
+        href: '/qr-code-generation',
+    },
+    {
+        icon: ScanText,
+        title: 'AI Menu Scanner',
+        description: 'Instantly digitize your physical menu.',
+        href: '/ai-menu-scanner',
+    },
+    {
+        icon: Paintbrush,
+        title: 'Personal Branding',
+        description: 'Customize your page with your logo and colors.',
+        href: '/branding',
+    },
+    {
+        icon: Calendar,
+        title: 'Events',
+        description: 'Showcase your events for guests to see.',
+        href: '/events',
+    },
+    {
+        icon: Waves,
+        title: 'Rentals',
+        description: 'Post rentals like VIP booths.',
+        href: '/rentals',
+    },
+    {
+        icon: Camera,
+        title: 'Photo Booth',
+        description: 'Engage customers with a branded photo booth.',
+        href: '/photo-booth',
+    },
+];
+
+interface FeaturesSectionProps {
+    features?: Feature[];
+    layoutStyle?: '3-column' | '4-column' | 'icon-list' | 'feature-cards';
+}
+
+// Helper to get Lucide icon by name
+function getIconByName(iconName: string): LucideIcon {
+    const icons = LucideIcons as Record<string, LucideIcon>;
+    return icons[iconName] || QrCode;
+}
+
+export function FeaturesSection({
+    features,
+    layoutStyle = '3-column'
+}: FeaturesSectionProps) {
+    // Use custom features if provided, otherwise use defaults
+    const displayFeatures = features && features.length > 0
+        ? features.map(f => ({
+            icon: getIconByName(f.icon),
+            title: f.title,
+            description: f.description,
+            href: '', // Custom features don't have hrefs
+        }))
+        : defaultFeatures;
+
+    // Determine grid columns based on layout style
+    const gridCols = layoutStyle === '4-column'
+        ? 'lg:grid-cols-4'
+        : 'lg:grid-cols-3';
 
     return (
         <section className="py-20 bg-gray-50">
@@ -62,8 +94,8 @@ export function FeaturesSection() {
                 </p>
 
                 {/* Features Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-                    {features.map((feature, index) => {
+                <div className={`grid grid-cols-1 md:grid-cols-2 ${gridCols} gap-6 max-w-7xl mx-auto`}>
+                    {displayFeatures.map((feature, index) => {
                         const Card = (
                             <FeatureCard
                                 key={index}
@@ -81,7 +113,7 @@ export function FeaturesSection() {
                             );
                         }
 
-                        return Card;
+                        return <div key={index}>{Card}</div>;
                     })}
                 </div>
             </div>

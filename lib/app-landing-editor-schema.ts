@@ -68,6 +68,14 @@ export interface SEOConfig {
     ogDescription: string;
 }
 
+export interface SliderSettings {
+    slideDuration: 3 | 5 | 7 | 10; // seconds
+    transitionEffect: 'fade' | 'slide' | 'zoom';
+    showDots: boolean;
+    overlayOpacity: number; // 0-100
+    pauseOnHover: boolean;
+}
+
 export interface AppLandingEditorData {
     // Hero Tab
     heroHeadline: string;
@@ -75,6 +83,8 @@ export interface AppLandingEditorData {
     heroButtonText: string;
     heroLayoutStyle: 'cinematic-center' | 'split-screen' | 'mobile-showcase' | 'cinematic-slider';
     heroBackgroundImageUrl: string;
+    heroSliderImages: string[]; // For cinematic-slider layout
+    heroSliderSettings: SliderSettings; // Slider configuration
 
     // Features Tab
     features: Feature[];
@@ -96,6 +106,14 @@ export const defaultAppLandingData: AppLandingEditorData = {
     heroButtonText: 'Get Started Now',
     heroLayoutStyle: 'cinematic-center',
     heroBackgroundImageUrl: '',
+    heroSliderImages: [],
+    heroSliderSettings: {
+        slideDuration: 5,
+        transitionEffect: 'fade',
+        showDots: true,
+        overlayOpacity: 50,
+        pauseOnHover: true
+    },
     features: [],
     featuresLayoutStyle: '3-column',
     branding: {
