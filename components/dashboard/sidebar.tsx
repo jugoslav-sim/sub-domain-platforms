@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import {
     LayoutDashboard,
     Calendar,
@@ -35,8 +35,16 @@ const navItems: NavItem[] = [
 
 export function Sidebar() {
     const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const currentVenueTag = searchParams.get('venue');
 
     let currentSection: string | null = null;
+
+    // Helper to append venue param
+    const getHref = (href: string) => {
+        if (!currentVenueTag) return href;
+        return `${href}?venue=${currentVenueTag}`;
+    };
 
     return (
         <aside className="w-64 bg-white border-r border-sidebar-border flex flex-col h-screen sticky top-0">
@@ -73,7 +81,7 @@ export function Sidebar() {
                                     </div>
                                 )}
                                 <Link
-                                    href={item.href}
+                                    href={getHref(item.href)}
                                     className={cn(
                                         'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                                         pathname === item.href
@@ -105,7 +113,7 @@ export function Sidebar() {
                         className="w-full border-purple-200 text-purple-700 hover:bg-purple-50"
                         asChild
                     >
-                        <Link href={`/s/${currentVenue.tag}`} target="_blank">
+                        <Link href={`/s/${currentVenueTag || currentVenue.tag}`} target="_blank">
                             <Globe className="h-4 w-4 mr-2" />
                             Venue Live Page
                         </Link>

@@ -1,13 +1,13 @@
-
-import { supabase } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/types/database';
 
 export type Testimonial = Database['public']['Tables']['venue_testimonials']['Row'];
 export type NewTestimonial = Database['public']['Tables']['venue_testimonials']['Insert'];
 
 export const testimonialService = {
-    getAll: async (venueId: string) => {
-        const { data, error } = await supabase
+    // Get all testimonials for a venue
+    getAll: async (client: SupabaseClient, venueId: string) => {
+        const { data, error } = await client
             .from('venue_testimonials')
             .select('*')
             .eq('venue_id', venueId)
@@ -17,8 +17,9 @@ export const testimonialService = {
         return data;
     },
 
-    add: async (testimonial: NewTestimonial) => {
-        const { data, error } = await supabase
+    // Add a new testimonial
+    add: async (client: SupabaseClient, testimonial: NewTestimonial) => {
+        const { data, error } = await client
             .from('venue_testimonials')
             .insert(testimonial)
             .select()
@@ -28,8 +29,9 @@ export const testimonialService = {
         return data;
     },
 
-    update: async (id: string, updates: Partial<Testimonial>) => {
-        const { data, error } = await supabase
+    // Update a testimonial
+    update: async (client: SupabaseClient, id: string, updates: Partial<Testimonial>) => {
+        const { data, error } = await client
             .from('venue_testimonials')
             .update(updates)
             .eq('id', id)
@@ -40,8 +42,9 @@ export const testimonialService = {
         return data;
     },
 
-    delete: async (id: string) => {
-        const { error } = await supabase
+    // Delete a testimonial
+    delete: async (client: SupabaseClient, id: string) => {
+        const { error } = await client
             .from('venue_testimonials')
             .delete()
             .eq('id', id);
@@ -49,8 +52,9 @@ export const testimonialService = {
         if (error) throw error;
     },
 
-    deleteAll: async (venueId: string) => {
-        const { error } = await supabase
+    // Delete all testimonials for a venue
+    deleteAll: async (client: SupabaseClient, venueId: string) => {
+        const { error } = await client
             .from('venue_testimonials')
             .delete()
             .eq('venue_id', venueId);

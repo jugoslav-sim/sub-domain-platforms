@@ -1,4 +1,5 @@
 import { redis } from '@/lib/redis';
+import { supabase } from '@/lib/supabase';
 import { venueService } from '@/lib/db/venues';
 import { galleryService } from '@/lib/db/venue-gallery';
 import { menuService } from '@/lib/db/venue-menu-items';
@@ -19,15 +20,15 @@ export async function getVenueByTag(tag: string): Promise<VenueEditorData | null
 
     // 2. Fetch from Supabase
     try {
-        const venue = await venueService.getByTag(tag);
+        const venue = await venueService.getByTag(supabase, tag);
         if (!venue) return null;
 
         // Fetch related data in parallel
         const [gallery, menu, events, testimonials] = await Promise.all([
-            galleryService.getAll(venue.id),
-            menuService.getAll(venue.id),
-            eventService.getAll(venue.id),
-            testimonialService.getAll(venue.id)
+            galleryService.getAll(supabase, venue.id),
+            menuService.getAll(supabase, venue.id),
+            eventService.getAll(supabase, venue.id),
+            testimonialService.getAll(supabase, venue.id)
         ]);
 
         // 3. Construct VenueEditorData

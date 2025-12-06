@@ -1,5 +1,6 @@
 'use server';
 
+import { createClient } from '@/lib/auth/server';
 import { venueService } from '@/lib/db/venues';
 import { galleryService } from '@/lib/db/venue-gallery';
 import { menuService } from '@/lib/db/venue-menu-items';
@@ -9,14 +10,12 @@ import { invalidateVenueCache } from '@/lib/venue-data';
 import { VenueEditorData } from '@/lib/venue-editor-schema';
 import { revalidatePath } from 'next/cache';
 
-// Hardcoded tag for this phase, or passed from context
-const CURRENT_VENUE_TAG = 'venuvibes';
+export async function saveVenueAction(data: VenueEditorData, venueTag: string) {
+    const supabase = await createClient();
 
-export async function saveVenueAction(data: VenueEditorData) {
     try {
-        // 1. Get Venue ID (assuming single venue for now)
-        // In real app, we might pass ID or get from session
-        const venue = await venueService.getByTag(CURRENT_VENUE_TAG);
+        // 1. Get Venue ID securely
+        const venue = await venueService.getByTag(supabase, venueTag);
 
         if (!venue) {
             return { success: false, error: 'Venue not found' };
@@ -25,7 +24,7 @@ export async function saveVenueAction(data: VenueEditorData) {
         const venueId = venue.id;
 
         // 2. Update Core Config (JSONBs)
-        await venueService.update(venueId, {
+        await venueService.update(supabase, venueId, {
             name: data.venueName,
             profile_data: {
                 venueName: data.venueName,
@@ -67,13 +66,12 @@ export async function saveVenueAction(data: VenueEditorData) {
         });
 
         // 3. Update Relations (Gallery, Menu, Events, Testimonials)
-        // Using "Delete All -> Insert All" strategy for simplicity and guaranteed sequencing.
 
         // Gallery
-        await galleryService.deleteAll(venueId);
+        await galleryService.deleteAll(supabase, venueId);
         if (data.galleryImages?.length > 0) {
             await Promise.all(data.galleryImages.map(img =>
-                galleryService.add({
+                galleryService.add(supabase, {
                     venue_id: venueId,
                     url: img.url,
                     alt_text: img.alt,
@@ -83,10 +81,10 @@ export async function saveVenueAction(data: VenueEditorData) {
         }
 
         // Menu
-        await menuService.deleteAll(venueId);
+        await menuService.deleteAll(supabase, venueId);
         if (data.menuItems?.length > 0) {
             await Promise.all(data.menuItems.map((item, index) =>
-                menuService.add({
+                menuService.add(supabase, {
                     venue_id: venueId,
                     name: item.name,
                     description: item.description,
@@ -94,21 +92,20 @@ export async function saveVenueAction(data: VenueEditorData) {
                     category: item.category,
                     image_url: item.imageUrl,
                     is_signature: item.isSignature,
-                    sort_order: index, // assuming array order is sort order
+                    sort_order: index,
                     is_available: true
                 })
             ));
         }
 
         // Events
-        await eventService.deleteAll(venueId);
+        await eventService.deleteAll(supabase, venueId);
         if (data.events?.length > 0) {
             await Promise.all(data.events.map(event => {
-                // Parse date/time strings roughly: date="MM/DD/YYYY", time="HH:MM AM/PM"
                 const eventDate = new Date(`${event.date} ${event.time}`);
                 const startTime = !isNaN(eventDate.getTime()) ? eventDate.toISOString() : new Date().toISOString();
 
-                return eventService.add({
+                return eventService.add(supabase, {
                     venue_id: venueId,
                     name: event.title,
                     description: event.description,
@@ -121,10 +118,10 @@ export async function saveVenueAction(data: VenueEditorData) {
         }
 
         // Testimonials
-        await testimonialService.deleteAll(venueId);
+        await testimonialService.deleteAll(supabase, venueId);
         if (data.testimonials?.length > 0) {
             await Promise.all(data.testimonials.map(t =>
-                testimonialService.add({
+                testimonialService.add(supabase, {
                     venue_id: venueId,
                     author_name: t.author,
                     author_role: t.role,
@@ -146,9 +143,9 @@ export async function saveVenueAction(data: VenueEditorData) {
         return { success: false, error: error?.message || 'Failed to save changes' };
     }
 
-    // Invalidate Cache
-    await invalidateVenueCache(CURRENT_VENUE_TAG);
-    revalidatePath('/s/[subdomain]');
+    // Invalidate Cache and Revalidate Paths
+    await invalidateVenueCache(venueTag);
+    revalidatePath(`/s/${venueTag}`);
 
     return { success: true };
 }

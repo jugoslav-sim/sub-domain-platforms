@@ -11,9 +11,10 @@ import { saveVenueAction } from './actions';
 
 interface VenueEditorClientProps {
     initialData: VenueEditorData | null;
+    venueTag: string;
 }
 
-export function VenueEditorClient({ initialData }: VenueEditorClientProps) {
+export function VenueEditorClient({ initialData, venueTag }: VenueEditorClientProps) {
     const [isSaving, setIsSaving] = React.useState(false);
     const [lastSaved, setLastSaved] = React.useState<Date | null>(null);
     const [saveStatus, setSaveStatus] = React.useState<'idle' | 'success' | 'error'>('idle');
@@ -32,7 +33,7 @@ export function VenueEditorClient({ initialData }: VenueEditorClientProps) {
         setIsSaving(true);
         setSaveStatus('idle');
         try {
-            const result = await saveVenueAction(data);
+            const result = await saveVenueAction(data, venueTag);
             if (result.success) {
                 setLastSaved(new Date());
                 methods.reset(data); // Reset dirty state with new data

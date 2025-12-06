@@ -1,13 +1,13 @@
-
-import { supabase } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/types/database';
 
 export type VenueEvent = Database['public']['Tables']['venue_events']['Row'];
 export type NewVenueEvent = Database['public']['Tables']['venue_events']['Insert'];
 
 export const eventService = {
-    getAll: async (venueId: string) => {
-        const { data, error } = await supabase
+    // Get all events for a venue
+    getAll: async (client: SupabaseClient, venueId: string) => {
+        const { data, error } = await client
             .from('venue_events')
             .select('*')
             .eq('venue_id', venueId)
@@ -17,8 +17,9 @@ export const eventService = {
         return data;
     },
 
-    getUpcoming: async (venueId: string) => {
-        const { data, error } = await supabase
+    // Get upcoming events
+    getUpcoming: async (client: SupabaseClient, venueId: string) => {
+        const { data, error } = await client
             .from('venue_events')
             .select('*')
             .eq('venue_id', venueId)
@@ -30,8 +31,9 @@ export const eventService = {
         return data;
     },
 
-    add: async (event: NewVenueEvent) => {
-        const { data, error } = await supabase
+    // Add a new event
+    add: async (client: SupabaseClient, event: NewVenueEvent) => {
+        const { data, error } = await client
             .from('venue_events')
             .insert(event)
             .select()
@@ -41,8 +43,9 @@ export const eventService = {
         return data;
     },
 
-    update: async (id: string, updates: Partial<VenueEvent>) => {
-        const { data, error } = await supabase
+    // Update an event
+    update: async (client: SupabaseClient, id: string, updates: Partial<VenueEvent>) => {
+        const { data, error } = await client
             .from('venue_events')
             .update(updates)
             .eq('id', id)
@@ -53,8 +56,9 @@ export const eventService = {
         return data;
     },
 
-    delete: async (id: string) => {
-        const { error } = await supabase
+    // Delete an event
+    delete: async (client: SupabaseClient, id: string) => {
+        const { error } = await client
             .from('venue_events')
             .delete()
             .eq('id', id);
@@ -62,8 +66,9 @@ export const eventService = {
         if (error) throw error;
     },
 
-    deleteAll: async (venueId: string) => {
-        const { error } = await supabase
+    // Delete all events for a venue
+    deleteAll: async (client: SupabaseClient, venueId: string) => {
+        const { error } = await client
             .from('venue_events')
             .delete()
             .eq('venue_id', venueId);

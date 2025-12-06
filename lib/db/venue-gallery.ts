@@ -1,5 +1,5 @@
 
-import { supabase } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/types/database';
 
 export type GalleryImage = Database['public']['Tables']['venue_gallery']['Row'];
@@ -7,8 +7,8 @@ export type NewGalleryImage = Database['public']['Tables']['venue_gallery']['Ins
 
 export const galleryService = {
     // Get all images for a venue
-    getAll: async (venueId: string) => {
-        const { data, error } = await supabase
+    getAll: async (client: SupabaseClient, venueId: string) => {
+        const { data, error } = await client
             .from('venue_gallery')
             .select('*')
             .eq('venue_id', venueId)
@@ -19,8 +19,8 @@ export const galleryService = {
     },
 
     // Add a new image
-    add: async (image: NewGalleryImage) => {
-        const { data, error } = await supabase
+    add: async (client: SupabaseClient, image: NewGalleryImage) => {
+        const { data, error } = await client
             .from('venue_gallery')
             .insert(image)
             .select()
@@ -31,8 +31,8 @@ export const galleryService = {
     },
 
     // Update an image
-    update: async (id: string, updates: Partial<GalleryImage>) => {
-        const { data, error } = await supabase
+    update: async (client: SupabaseClient, id: string, updates: Partial<GalleryImage>) => {
+        const { data, error } = await client
             .from('venue_gallery')
             .update(updates)
             .eq('id', id)
@@ -44,8 +44,8 @@ export const galleryService = {
     },
 
     // Delete an image
-    delete: async (id: string) => {
-        const { error } = await supabase
+    delete: async (client: SupabaseClient, id: string) => {
+        const { error } = await client
             .from('venue_gallery')
             .delete()
             .eq('id', id);
@@ -54,8 +54,8 @@ export const galleryService = {
     },
 
     // Delete all images for a venue
-    deleteAll: async (venueId: string) => {
-        const { error } = await supabase
+    deleteAll: async (client: SupabaseClient, venueId: string) => {
+        const { error } = await client
             .from('venue_gallery')
             .delete()
             .eq('venue_id', venueId);
@@ -64,10 +64,10 @@ export const galleryService = {
     },
 
     // Reorder images
-    reorder: async (items: { id: string; sort_order: number }[]) => {
+    reorder: async (client: SupabaseClient, items: { id: string; sort_order: number }[]) => {
         // This could be optimized with an RPC call, but loop is fine for small galleries
         const updates = items.map(item =>
-            supabase.from('venue_gallery').update({ sort_order: item.sort_order }).eq('id', item.id)
+            client.from('venue_gallery').update({ sort_order: item.sort_order }).eq('id', item.id)
         );
         await Promise.all(updates);
     }
