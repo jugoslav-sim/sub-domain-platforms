@@ -5,6 +5,8 @@ import { isValidIcon } from '@/lib/subdomains';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { rootDomain, protocol } from '@/lib/utils';
+import { venueService } from '@/lib/db/venues';
+import { defaultVenueData } from '@/lib/venue-editor-schema';
 
 export async function createSubdomainAction(
   prevState: any,
@@ -50,10 +52,67 @@ export async function createSubdomainAction(
     };
   }
 
-  await redis.set(`subdomain:${sanitizedSubdomain}`, {
-    emoji: icon,
-    createdAt: Date.now()
-  });
+  // Create Venue in Supabase
+  try {
+    const newVenue = await venueService.create({
+      tag: sanitizedSubdomain,
+      name: sanitizedSubdomain,
+      profile_data: {
+        venueName: sanitizedSubdomain,
+        venueType: defaultVenueData.venueType,
+        themeColor: defaultVenueData.themeColor,
+        coverImageUrl: defaultVenueData.coverImageUrl,
+        tagline: `Welcome to ${subdomain}`,
+        vibeKeywords: defaultVenueData.vibeKeywords,
+        description: defaultVenueData.description
+      },
+      hero_data: {
+        heroHeadline: defaultVenueData.heroHeadline,
+        heroDescription: defaultVenueData.heroDescription,
+        heroButtonText: defaultVenueData.heroButtonText,
+        heroButtonUrl: defaultVenueData.heroButtonUrl,
+        heroLayoutStyle: defaultVenueData.heroLayoutStyle,
+        heroBackgroundImageUrl: defaultVenueData.heroBackgroundImageUrl
+      },
+      branding_data: {
+        logo: defaultVenueData.logo,
+        brandColors: defaultVenueData.brandColors
+      },
+      layout_data: {
+        layoutStyle: defaultVenueData.layoutStyle,
+        highlights: defaultVenueData.highlights
+      },
+      seo_data: {
+        metaTitle: defaultVenueData.metaTitle,
+        metaDescription: defaultVenueData.metaDescription,
+        metaKeywords: defaultVenueData.metaKeywords
+      },
+      location_data: defaultVenueData.location as unknown as any,
+      hours_data: defaultVenueData.hours as unknown as any,
+      social_data: defaultVenueData.socialLinks as unknown as any,
+      music_data: {
+        spotifyPlaylistUrl: defaultVenueData.spotifyPlaylistUrl,
+        atmosphereDescription: defaultVenueData.atmosphereDescription
+      },
+      is_published: true
+    });
+
+    // Store in Redis with reference to Supabase ID
+    await redis.set(`subdomain:${sanitizedSubdomain}`, {
+      venueId: newVenue.id,
+      emoji: icon,
+      createdAt: Date.now()
+    });
+
+  } catch (error) {
+    console.error("Failed to create venue:", error);
+    return {
+      subdomain,
+      icon,
+      success: false,
+      error: 'Failed to create venue. Please try again.'
+    };
+  }
 
   redirect(`${protocol}://${sanitizedSubdomain}.${rootDomain}`);
 }
