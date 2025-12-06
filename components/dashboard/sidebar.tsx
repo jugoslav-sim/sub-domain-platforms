@@ -6,18 +6,14 @@ import {
     LayoutDashboard,
     Calendar,
     Sparkles,
-    ImageIcon,
-    QrCode,
-    SquareParking,
     Palette,
     Globe,
-    ScanText,
-    Settings,
     ExternalLink
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { VenueSelector } from './venue-selector';
 import { Button } from '@/components/ui/button';
+import { currentVenue } from '@/lib/mock-data';
 
 interface NavItem {
     label: string;
@@ -34,13 +30,7 @@ const navItems: NavItem[] = [
     { label: 'App Landing Editor', href: '/admin/app-landing-editor', icon: Palette },
 ];
 
-const featureLinks = [
-    { label: 'Photo Booth', href: '/photo-booth', icon: ImageIcon },
-    { label: 'QR Code Generation', href: '/qr-code-generation', icon: QrCode },
-    { label: 'Rentals', href: '/rentals', icon: SquareParking },
-    { label: 'AI Menu Scanner', href: '/ai-menu-scanner', icon: ScanText },
-    { label: 'Branding', href: '/branding', icon: Palette },
-];
+
 
 export function Sidebar() {
     const pathname = usePathname();
@@ -95,37 +85,27 @@ export function Sidebar() {
                     })}
                 </div>
 
-                {/* View Live Page CTA */}
-                <div className="px-3 mt-6">
+                {/* App Home Page CTA */}
+                <div className="px-3 mt-6 space-y-2">
                     <Button
                         className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                         asChild
                     >
                         <Link href="/" target="_blank">
                             <ExternalLink className="h-4 w-4 mr-2" />
-                            View Live Page
+                            App Home Page
                         </Link>
                     </Button>
-                </div>
-
-                {/* Feature Links */}
-                <div className="px-3 mt-6">
-                    <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                        Features
-                    </div>
-                    <div className="space-y-1">
-                        {featureLinks.map((link) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
-                                target="_blank"
-                            >
-                                <link.icon className="h-4 w-4" />
-                                {link.label}
-                            </Link>
-                        ))}
-                    </div>
+                    <Button
+                        variant="outline"
+                        className="w-full border-purple-200 text-purple-700 hover:bg-purple-50"
+                        asChild
+                    >
+                        <Link href={`/s/${currentVenue.tag}`} target="_blank">
+                            <Globe className="h-4 w-4 mr-2" />
+                            Venue Live Page
+                        </Link>
+                    </Button>
                 </div>
             </nav>
 
