@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { AuthProvider } from '@/lib/auth/context';
 import './globals.css';
 
 const geistSans = Geist({
@@ -9,8 +10,8 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: 'Platforms Starter Kit',
-  description: 'Next.js template for building a multi-tenant SaaS.'
+  title: 'VenueVibe',
+  description: 'Create stunning venue landing pages in minutes.'
 };
 
 export default function RootLayout({
@@ -24,7 +25,9 @@ export default function RootLayout({
         className={`${geistSans.variable} antialiased`}
         suppressHydrationWarning
       >
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
         <SpeedInsights />
       </body>
     </html>

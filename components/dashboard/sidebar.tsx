@@ -13,6 +13,7 @@ import {
 import { cn } from '@/lib/utils';
 import { VenueSelector } from './venue-selector';
 import { Button } from '@/components/ui/button';
+import { UserNav } from '@/components/auth/user-nav';
 import { currentVenue } from '@/lib/mock-data';
 
 interface NavItem {
@@ -39,16 +40,19 @@ export function Sidebar() {
 
     return (
         <aside className="w-64 bg-white border-r border-sidebar-border flex flex-col h-screen sticky top-0">
-            {/* Logo */}
+            {/* Logo & User */}
             <div className="p-6 border-b border-sidebar-border">
-                <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-                        <Sparkles className="h-5 w-5 text-white" />
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                            <Sparkles className="h-5 w-5 text-white" />
+                        </div>
+                        <div>
+                            <div className="font-bold text-lg">VenueVibe</div>
+                            <div className="text-xs text-purple-600 font-medium">SaaS Edition</div>
+                        </div>
                     </div>
-                    <div>
-                        <div className="font-bold text-lg">VenueVibe</div>
-                        <div className="text-xs text-purple-600 font-medium">SaaS Edition</div>
-                    </div>
+                    <UserNav />
                 </div>
             </div>
 

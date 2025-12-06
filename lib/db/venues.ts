@@ -15,6 +15,10 @@ export const venueService = {
             .eq('tag', tag)
             .single();
 
+        // PGRST116 = no rows returned - this is expected for non-existent venues
+        if (error && error.code === 'PGRST116') {
+            return null;
+        }
         if (error) throw error;
         return data;
     },
