@@ -6,6 +6,10 @@ import { BrandingVisualsSection } from './branding-visuals-section';
 import { ShareConnectSection } from './share-connect-section';
 import { VibeContentSection } from './vibe-content-section';
 import { HeroSection } from './hero-section';
+import { HighlightsSection } from './highlights-section';
+import { AdvancedBrandingSection } from './advanced-branding-section';
+import { LayoutSection } from './layout-section';
+import { SEOSection } from './seo-section';
 
 export function VenueEditorTabs() {
     const [activeTab, setActiveTab] = React.useState("profile");
@@ -42,28 +46,21 @@ export function VenueEditorTabs() {
             </TabsContent>
 
             <TabsContent value="highlights">
-                <div className="p-8 text-center text-muted-foreground bg-gray-50 rounded-lg border border-dashed">
-                    Highlights customization coming soon
-                </div>
+                <HighlightsSection />
             </TabsContent>
 
             <TabsContent value="branding">
-                <div className="p-8 text-center text-muted-foreground bg-gray-50 rounded-lg border border-dashed">
-                    Advanced branding options coming soon
-                </div>
+                <AdvancedBrandingSection />
             </TabsContent>
 
             <TabsContent value="layout">
-                <div className="p-8 text-center text-muted-foreground bg-gray-50 rounded-lg border border-dashed">
-                    Layout options coming soon
-                </div>
+                <LayoutSection />
             </TabsContent>
 
             <TabsContent value="seo">
-                <div className="p-8 text-center text-muted-foreground bg-gray-50 rounded-lg border border-dashed">
-                    SEO settings coming soon
-                </div>
+                <SEOSection />
             </TabsContent>
         </Tabs>
     );
 }
+
