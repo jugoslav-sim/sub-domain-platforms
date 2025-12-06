@@ -88,8 +88,76 @@ export const mockVenueEditorData = {
     heroHeadline: 'Elevate Your Night',
     heroDescription: 'Experience the best views, cocktails, and music in the city. Welcome to The Cloud Lounge.',
     heroButtonText: 'Book a Table',
+    heroButtonUrl: '#location',
     heroLayoutStyle: 'cinematic-center' as const,
-    heroBackgroundImageUrl: 'https://images.unsplash.com/photo-1570572225388-755e88447d61?auto=format&fit=crop&w=1600&q=80'
+    heroBackgroundImageUrl: 'https://images.unsplash.com/photo-1570572225388-755e88447d61?auto=format&fit=crop&w=1600&q=80',
+
+    // Location & Hours
+    location: {
+        address: '123 Sky Tower, 50th Floor',
+        city: 'New York',
+        state: 'NY',
+        zipCode: '10001',
+        country: 'USA'
+    },
+    hours: [
+        { day: 'Monday', open: '5:00 PM', close: '12:00 AM', isClosed: false },
+        { day: 'Tuesday', open: '5:00 PM', close: '12:00 AM', isClosed: false },
+        { day: 'Wednesday', open: '5:00 PM', close: '12:00 AM', isClosed: false },
+        { day: 'Thursday', open: '5:00 PM', close: '1:00 AM', isClosed: false },
+        { day: 'Friday', open: '4:00 PM', close: '2:00 AM', isClosed: false },
+        { day: 'Saturday', open: '4:00 PM', close: '2:00 AM', isClosed: false },
+        { day: 'Sunday', open: '4:00 PM', close: '11:00 PM', isClosed: false }
+    ],
+
+    // Gallery
+    galleryImages: [
+        { id: '1', url: 'https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?auto=format&fit=crop&w=800&q=80', alt: 'Rooftop view at sunset', order: 1 },
+        { id: '2', url: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=800&q=80', alt: 'Bar interior', order: 2 },
+        { id: '3', url: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80', alt: 'Signature cocktail', order: 3 },
+        { id: '4', url: 'https://images.unsplash.com/photo-1572116469696-31de0f17cc34?auto=format&fit=crop&w=800&q=80', alt: 'Night atmosphere', order: 4 },
+        { id: '5', url: 'https://images.unsplash.com/photo-1560512823-829485b8bf24?auto=format&fit=crop&w=800&q=80', alt: 'Lounge seating', order: 5 },
+        { id: '6', url: 'https://images.unsplash.com/photo-1546171753-97d7676e4602?auto=format&fit=crop&w=800&q=80', alt: 'DJ booth', order: 6 }
+    ],
+
+    // Menu
+    menuCategories: ['Signature Cocktails', 'Classic Cocktails', 'Wine & Champagne', 'Small Plates'],
+    menuItems: [
+        { id: '1', name: 'Cloud Nine', description: 'Vodka, elderflower, champagne, lemon zest, edible gold', price: '$24', category: 'Signature Cocktails', isSignature: true, imageUrl: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=400&q=80' },
+        { id: '2', name: 'Sunset Boulevard', description: 'Tequila, blood orange, agave, chili rim', price: '$22', category: 'Signature Cocktails', isSignature: true, imageUrl: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=400&q=80' },
+        { id: '3', name: 'Midnight Velvet', description: 'Bourbon, blackberry, vanilla, activated charcoal', price: '$23', category: 'Signature Cocktails', isSignature: true, imageUrl: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=400&q=80' },
+        { id: '4', name: 'Old Fashioned', description: 'Bourbon, bitters, orange, cherry', price: '$18', category: 'Classic Cocktails', isSignature: false },
+        { id: '5', name: 'Negroni', description: 'Gin, Campari, sweet vermouth', price: '$17', category: 'Classic Cocktails', isSignature: false },
+        { id: '6', name: 'Espresso Martini', description: 'Vodka, Kahlúa, fresh espresso', price: '$19', category: 'Classic Cocktails', isSignature: false },
+        { id: '7', name: 'Truffle Fries', description: 'Hand-cut fries, truffle oil, parmesan, herbs', price: '$16', category: 'Small Plates', isSignature: false },
+        { id: '8', name: 'Oysters', description: 'Half dozen, mignonette, lemon', price: '$28', category: 'Small Plates', isSignature: false }
+    ],
+
+    // Events
+    events: [
+        { id: '1', title: 'Sunset Sessions', description: 'Live DJ set with the best sunset views in the city. Featuring deep house and chill vibes.', date: '2025-12-14', time: '6:00 PM - 10:00 PM', imageUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=600&q=80', ticketUrl: '#' },
+        { id: '2', title: 'Jazz & Champagne Night', description: 'Live jazz trio with complimentary champagne for the first 50 guests.', date: '2025-12-21', time: '8:00 PM - 12:00 AM', imageUrl: 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?auto=format&fit=crop&w=600&q=80', ticketUrl: '#' },
+        { id: '3', title: 'New Year\'s Eve Gala', description: 'Ring in the new year above the city skyline. Black tie. Open bar. Fireworks view.', date: '2025-12-31', time: '9:00 PM - 3:00 AM', imageUrl: 'https://images.unsplash.com/photo-1467810563316-b5476525c0f9?auto=format&fit=crop&w=600&q=80', ticketUrl: '#' }
+    ],
+
+    // Testimonials
+    testimonials: [
+        { id: '1', author: 'Sarah M.', role: 'NYC Local', content: 'Absolutely stunning views and the cocktails are incredible. The Cloud Nine is a must-try! Perfect for date nights.', rating: 5 },
+        { id: '2', author: 'James L.', role: 'Travel Blogger', content: 'One of the best rooftop bars I\'ve visited anywhere in the world. The atmosphere is unmatched.', rating: 5 },
+        { id: '3', author: 'Emily R.', role: 'Food & Drink Critic', content: 'The attention to detail in both the drinks and the ambiance is remarkable. A true gem in the NYC nightlife scene.', rating: 5 },
+        { id: '4', author: 'Michael T.', content: 'Great music, amazing views, friendly staff. What more could you ask for? Will definitely be back.', rating: 4 }
+    ],
+
+    // Music
+    spotifyPlaylistUrl: 'https://open.spotify.com/playlist/37i9dQZF1DXa8NOEUWPn9W',
+    atmosphereDescription: 'Immerse yourself in carefully curated deep house and chill electronic beats that perfectly complement the panoramic city views.',
+
+    // Social
+    socialLinks: {
+        instagram: 'https://instagram.com/thecloudlounge',
+        facebook: 'https://facebook.com/thecloudlounge',
+        tiktok: 'https://tiktok.com/@thecloudlounge'
+    }
 };
 
 export const mockAppLandingEditorData = {
