@@ -11,7 +11,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Header branding={landingData.branding} />
       <main className="pt-16">
         <HeroSection
           headline={landingData.heroHeadline || undefined}
