@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { X, Plus } from 'lucide-react';
 import { AppLandingEditorData } from '@/lib/app-landing-editor-schema';
 import { ImageUpload } from '@/components/venue-editor/image-upload';
+import { storageService } from '@/lib/db/storage';
 
 export function AppLandingSEOSection() {
     const { watch, setValue } = useFormContext<AppLandingEditorData>();
@@ -31,6 +32,18 @@ export function AppLandingSEOSection() {
     const removeKeyword = (index: number) => {
         const updatedKeywords = seo.metaKeywords.filter((_, i) => i !== index);
         updateSEO('metaKeywords', updatedKeywords);
+    };
+
+    // Helper to check if URL is valid and displayable (http/https only)
+    const isValidImageUrl = (url: string | undefined) => {
+        if (!url) return false;
+        return url.startsWith('http://') || url.startsWith('https://');
+    };
+
+    // Handle image upload to Supabase storage
+    const handleImageUpload = async (file: File) => {
+        const path = storageService.getStoragePath('app-landing', 'seo', file.name);
+        return await storageService.uploadImage(file, path);
     };
 
     return (
@@ -138,6 +151,7 @@ export function AppLandingSEOSection() {
                             value={seo.ogImage}
                             onChange={(value) => updateSEO('ogImage', value)}
                             placeholder="Enter image URL (1200x630px recommended)..."
+                            onUpload={handleImageUpload}
                         />
                         <p className="text-xs text-gray-500">
                             Recommended size: 1200x630px for optimal display across platforms
@@ -179,7 +193,7 @@ export function AppLandingSEOSection() {
                     <div className="space-y-2 pt-4 border-t">
                         <Label>Social Media Preview</Label>
                         <div className="border rounded-lg overflow-hidden max-w-md">
-                            {seo.ogImage && (
+                            {isValidImageUrl(seo.ogImage) && (
                                 <img
                                     src={seo.ogImage}
                                     alt="OG Preview"

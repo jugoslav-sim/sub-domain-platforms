@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { rootDomain, protocol } from '@/lib/utils';
 import { venueService } from '@/lib/db/venues';
 import { defaultVenueData } from '@/lib/venue-editor-schema';
+import { createClient } from '@/lib/auth/server';
 
 export async function createSubdomainAction(
   prevState: any,
@@ -53,8 +54,9 @@ export async function createSubdomainAction(
   }
 
   // Create Venue in Supabase
+  const supabase = await createClient();
   try {
-    const newVenue = await venueService.create({
+    const newVenue = await venueService.create(supabase, {
       tag: sanitizedSubdomain,
       name: sanitizedSubdomain,
       profile_data: {

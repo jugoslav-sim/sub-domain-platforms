@@ -11,6 +11,7 @@ import { AppLandingHeroLayoutSelector } from './app-landing-hero-layout-selector
 import { ImageUpload } from '@/components/venue-editor/image-upload';
 import { AppLandingEditorData } from '@/lib/app-landing-editor-schema';
 import { Plus, Trash2, GripVertical } from 'lucide-react';
+import { storageService } from '@/lib/db/storage';
 
 export function AppLandingHeroSection() {
     const { register, watch, setValue, control } = useFormContext<AppLandingEditorData>();
@@ -20,6 +21,12 @@ export function AppLandingHeroSection() {
     const heroSliderImages = watch('heroSliderImages') || [];
 
     const isSliderLayout = heroLayoutStyle === 'cinematic-slider';
+
+    // Helper to check if URL is valid and displayable (http/https only)
+    const isValidImageUrl = (url: string | undefined) => {
+        if (!url) return false;
+        return url.startsWith('http://') || url.startsWith('https://');
+    };
 
     const addSliderImage = () => {
         const newImages = [...heroSliderImages, ''];
@@ -35,6 +42,12 @@ export function AppLandingHeroSection() {
         const newImages = [...heroSliderImages];
         newImages[index] = value;
         setValue('heroSliderImages', newImages, { shouldDirty: true });
+    };
+
+    // Handle image upload to Supabase storage
+    const handleImageUpload = async (file: File, folder: 'hero' | 'logo' = 'hero') => {
+        const path = storageService.getStoragePath('app-landing', folder, file.name);
+        return await storageService.uploadImage(file, path);
     };
 
     return (
@@ -88,7 +101,7 @@ export function AppLandingHeroSection() {
                     <div className="space-y-3">
                         <Label>Background Image</Label>
                         <div className="relative rounded-xl overflow-hidden border bg-muted aspect-[21/9] group">
-                            {heroBackgroundImageUrl ? (
+                            {isValidImageUrl(heroBackgroundImageUrl) ? (
                                 <>
                                     <img
                                         src={heroBackgroundImageUrl}
@@ -101,6 +114,7 @@ export function AppLandingHeroSection() {
                                                 value={heroBackgroundImageUrl}
                                                 onChange={(value) => setValue('heroBackgroundImageUrl', value, { shouldDirty: true })}
                                                 placeholder="Enter image URL..."
+                                                onUpload={(file) => handleImageUpload(file, 'hero')}
                                             />
                                         </div>
                                     </div>
@@ -112,12 +126,13 @@ export function AppLandingHeroSection() {
                                             value={heroBackgroundImageUrl}
                                             onChange={(value) => setValue('heroBackgroundImageUrl', value, { shouldDirty: true })}
                                             placeholder="Enter image URL..."
+                                            onUpload={(file) => handleImageUpload(file, 'hero')}
                                         />
                                     </div>
                                 </div>
                             )}
 
-                            {heroBackgroundImageUrl && (
+                            {isValidImageUrl(heroBackgroundImageUrl) && (
                                 <div className="absolute bottom-4 right-4 opacity-100 group-hover:opacity-0 transition-opacity">
                                     <button
                                         type="button"
@@ -191,8 +206,9 @@ export function AppLandingHeroSection() {
                                                 value={imageUrl}
                                                 onChange={(value) => updateSliderImage(index, value)}
                                                 placeholder="Enter image URL..."
+                                                onUpload={(file) => handleImageUpload(file, 'hero')}
                                             />
-                                            {imageUrl && (
+                                            {isValidImageUrl(imageUrl) && (
                                                 <div className="relative rounded-lg overflow-hidden aspect-[16/9] bg-muted">
                                                     <img
                                                         src={imageUrl}

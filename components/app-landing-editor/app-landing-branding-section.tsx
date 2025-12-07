@@ -9,6 +9,7 @@ import { AppLandingEditorData } from '@/lib/app-landing-editor-schema';
 import { ImageUpload } from '@/components/venue-editor/image-upload';
 import { ColorSchemePicker } from './color-scheme-picker';
 import { GoogleFontSelector } from './google-font-selector';
+import { storageService } from '@/lib/db/storage';
 
 const logoPositions = [
     { value: 'left', label: 'Left', description: 'Logo aligned to the left' },
@@ -23,6 +24,11 @@ export function AppLandingBrandingSection() {
 
     const updateBranding = (field: string, value: any) => {
         setValue(`branding.${field}` as any, value, { shouldDirty: true });
+    };
+
+    const handleLogoUpload = async (file: File) => {
+        const path = storageService.getStoragePath('app-landing', 'logo', file.name);
+        return await storageService.uploadImage(file, path);
     };
 
     return (
@@ -43,6 +49,7 @@ export function AppLandingBrandingSection() {
                             value={branding.logoUrl}
                             onChange={(value) => updateBranding('logoUrl', value)}
                             placeholder="Enter logo URL or upload a file..."
+                            onUpload={handleLogoUpload}
                         />
                     </div>
 

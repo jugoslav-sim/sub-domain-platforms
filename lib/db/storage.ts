@@ -1,16 +1,25 @@
 
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/auth/client';
+
+// Get the singleton Supabase client
+const getSupabase = () => createClient();
 
 // Helper to handle client-side vs server-side upload
 // For now, this assumes client-side direct upload which is standard for Supabase
 export const storageService = {
     uploadImage: async (file: File, path: string) => {
+        const supabase = getSupabase();
         const { data, error } = await supabase.storage
             .from('venue-assets')
             .upload(path, file, {
                 cacheControl: '3600',
                 upsert: true
             });
+
+        if (error) {
+            console.error('Storage upload error:', error);
+            throw error;
+        }
 
         if (error) throw error;
 
@@ -23,6 +32,7 @@ export const storageService = {
     },
 
     deleteImage: async (path: string) => {
+        const supabase = getSupabase();
         const { error } = await supabase.storage
             .from('venue-assets')
             .remove([path]);

@@ -1,5 +1,5 @@
 import { redis } from '@/lib/redis';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/auth/server';
 import { venueService } from '@/lib/db/venues';
 import { galleryService } from '@/lib/db/venue-gallery';
 import { menuService } from '@/lib/db/venue-menu-items';
@@ -20,6 +20,7 @@ export async function getVenueByTag(tag: string): Promise<VenueEditorData | null
 
     // 2. Fetch from Supabase
     try {
+        const supabase = await createClient();
         const venue = await venueService.getByTag(supabase, tag);
         if (!venue) return null;
 

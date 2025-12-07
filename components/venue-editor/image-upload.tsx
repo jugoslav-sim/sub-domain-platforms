@@ -3,18 +3,35 @@
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Upload, X, Image as ImageIcon } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 interface ImageUploadProps {
     value: string;
     onChange: (value: string) => void;
     placeholder?: string;
+    onUpload?: (file: File) => Promise<string>;
 }
 
-export function ImageUpload({ value, onChange, placeholder = "https://..." }: ImageUploadProps) {
+export function ImageUpload({ value, onChange, placeholder = "https://...", onUpload }: ImageUploadProps) {
     const [isDragging, setIsDragging] = React.useState(false);
+    const [isUploading, setIsUploading] = React.useState(false);
+    const [imageError, setImageError] = React.useState(false);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
+    const { toast } = useToast();
+
+    // Check if the value is a valid displayable URL (http/https)
+    const isValidImageUrl = (url: string) => {
+        if (!url) return false;
+        // Only display http/https URLs, not blob: or uuid-like strings
+        return url.startsWith('http://') || url.startsWith('https://');
+    };
+
+    // Reset error state when value changes
+    React.useEffect(() => {
+        setImageError(false);
+    }, [value]);
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
@@ -43,11 +60,31 @@ export function ImageUpload({ value, onChange, placeholder = "https://..." }: Im
         }
     };
 
-    const handleFile = (file: File) => {
-        // In a real app, we would upload to a server here.
-        // For this demo, we'll create a local object URL.
-        const url = URL.createObjectURL(file);
-        onChange(url);
+    const handleFile = async (file: File) => {
+        if (onUpload) {
+            try {
+                setIsUploading(true);
+                const url = await onUpload(file);
+                setIsUploading(false);
+                onChange(url);
+                toast({
+                    title: "Image uploaded",
+                    description: "Your image has been successfully uploaded."
+                });
+            } catch (error) {
+                console.error('Upload failed:', error);
+                setIsUploading(false);
+                toast({
+                    title: "Upload failed",
+                    description: `Failed to upload image: ${error instanceof Error ? error.message : 'Unknown error'}`,
+                    variant: "destructive"
+                });
+            }
+        } else {
+            // For older implementations or demos
+            const url = URL.createObjectURL(file);
+            onChange(url);
+        }
     };
 
     return (
@@ -58,14 +95,20 @@ export function ImageUpload({ value, onChange, placeholder = "https://..." }: Im
                     onChange={(e) => onChange(e.target.value)}
                     placeholder={placeholder}
                     className="flex-1"
+                    disabled={isUploading}
                 />
                 <Button
                     variant="outline"
                     onClick={() => fileInputRef.current?.click()}
                     type="button"
+                    disabled={isUploading}
                 >
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload
+                    {isUploading ? (
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                        <Upload className="h-4 w-4 mr-2" />
+                    )}
+                    {isUploading ? 'Uploading...' : 'Upload'}
                 </Button>
                 <input
                     type="file"
@@ -73,6 +116,7 @@ export function ImageUpload({ value, onChange, placeholder = "https://..." }: Im
                     className="hidden"
                     accept="image/*"
                     onChange={handleFileSelect}
+                    disabled={isUploading}
                 />
             </div>
 
@@ -86,12 +130,18 @@ export function ImageUpload({ value, onChange, placeholder = "https://..." }: Im
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
             >
-                {value ? (
+                {isUploading ? (
+                    <div className="flex flex-col items-center justify-center text-muted-foreground">
+                        <Loader2 className="h-8 w-8 animate-spin mb-2" />
+                        <p className="text-sm">Uploading image...</p>
+                    </div>
+                ) : (value && isValidImageUrl(value) && !imageError) ? (
                     <>
                         <img
                             src={value}
                             alt="Cover preview"
                             className="w-full h-full object-cover"
+                            onError={() => setImageError(true)}
                         />
                         <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
                             <Button
